@@ -1,7 +1,5 @@
 <?php 
 
-include_once '../config/Database.php';
-
     abstract class Products extends Database{
 
         protected $sku;
