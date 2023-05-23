@@ -1,5 +1,9 @@
 <?php
 
+include_once 'book.php';
+include_once 'dvd.php';
+include_once 'furniture.php';
+
 class Controller
 {
     public function fetchProducts()
@@ -34,7 +38,25 @@ class Controller
         }
     }
 
+
     public function addProduct()
     {
+        //Get data -- postman
+        $data = json_decode(file_get_contents('php://input'));
+
+        $type = $data->type;
+        unset($data->type);
+        $data = (array) $data;
+        $product = new $type(...$data);
+
+        if ($product->addProductType()) {
+            echo json_encode(
+                array('message' => 'Product added')
+            );
+        } else {
+            echo json_encode(
+                array('message' => 'Product Not Add')
+            );
+        }
     }
 }
