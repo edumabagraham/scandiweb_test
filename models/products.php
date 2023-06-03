@@ -7,7 +7,8 @@ abstract class Products extends Database
     public $name;
     public $price;
 
-    public function __construct($sku, $name,$price){
+    public function __construct($sku, $name, $price)
+    {
         $this->sku = $sku;
         $this->name = $name;
         $this->price = $price;
@@ -43,18 +44,17 @@ abstract class Products extends Database
                         price = :price
                 ;';
         $stmt = self::connect()->prepare($query);
-        
+
         //Bind params
         $stmt->bindParam(':sku', $this->sku);
         $stmt->bindParam(':name', $this->name);
-        $stmt->bindParam(':price', $this->price);        
-        
+        $stmt->bindParam(':price', $this->price);
+
         if ($stmt->execute()) {
             return true;
         }
-      return false;
+        return false;
     }
 
     abstract public function addProductType();
-
 }

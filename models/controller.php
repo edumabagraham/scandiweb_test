@@ -13,7 +13,6 @@ class Controller
 
         if ($num > 0) {
             $products_arr = array();
-            $products_arr['data'] = array();
 
             while ($row = $products_results->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
@@ -28,7 +27,7 @@ class Controller
                     'width' => $width,
                     'length' => $length
                 );
-                array_push($products_arr['data'], array_filter($product_item));
+                array_push($products_arr, array_filter($product_item));
             }
             echo json_encode($products_arr);
         } else {
@@ -45,18 +44,27 @@ class Controller
         $data = json_decode(file_get_contents('php://input'));
 
         $type = $data->type;
-        unset($data->type);
-        $data = (array) $data;
-        $product = new $type(...$data);
+        unset($data->type); 
+        $data = (array) $data;  // convert object to array
+        $product = new $type(...$data); //spreading to provide only data peculiar to the class
 
-        if ($product->addProductType()) {
+        try {
+            if ($product->addProductType()) {
+                echo json_encode(
+                    array('message' => 'Product added')
+                );
+            } else {
+                echo json_encode(
+                    array('message' => 'Product Not Added')
+                );
+            }
+        } catch (Exception) {
             echo json_encode(
-                array('message' => 'Product added')
-            );
-        } else {
-            echo json_encode(
-                array('message' => 'Product Not Add')
-            );
+                array(
+                    'message' => 'SKU already exists!'
+                )
+                );
         }
+
     }
 }
