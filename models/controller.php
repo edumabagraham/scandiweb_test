@@ -44,14 +44,16 @@ class Controller
         $data = json_decode(file_get_contents('php://input'));
 
         $type = $data->type;
-        unset($data->type); 
+        unset($data->type);
         $data = (array) $data;  // convert object to array
         $product = new $type(...$data); //spreading to provide only data peculiar to the class
 
         try {
             if ($product->addProductType()) {
                 echo json_encode(
-                    array('message' => 'Product added')
+                    array(
+                        'message' => 'Product added'
+                    )
                 );
             } else {
                 echo json_encode(
@@ -63,8 +65,18 @@ class Controller
                 array(
                     'message' => 'SKU already exists!'
                 )
-                );
+            );
         }
+    }
 
+    public function deleteProduct()
+    {
+        $data = json_decode(file_get_contents('php://input'));
+        print_r($data);
+        foreach($data as $sku)
+        {
+            Products::delete($sku);
+        }
     }
 }
+ 

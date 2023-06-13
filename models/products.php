@@ -31,10 +31,11 @@ abstract class Products extends Database
             return $stmt;
         } else {
             $stmt = null;
+            return false;
         }
     }
 
-    public function insertProduct()
+    public function insert()
     {
         $query = 'INSERT INTO
                         products
@@ -54,6 +55,26 @@ abstract class Products extends Database
             return true;
         }
         return false;
+    }
+
+    public static function delete($sku)
+    {
+        $query = 'DELETE FROM
+                    products
+                  WHERE
+                    sku = :sku
+                    ;';
+        $stmt = self::connect()->prepare($query);
+
+        //Bind params
+        $stmt->bindParam(':sku', $sku);
+
+        if ($stmt->execute()) {
+            return $stmt;
+        }
+        else {
+            return false;
+        }
     }
 
     abstract public function addProductType();
