@@ -1,13 +1,21 @@
 <?php
-spl_autoload_register('my_autoloader');
+spl_autoload_register('models_autoloader');
 
-function my_autoloader()
+function models_autoloader($class_name)
 {
-include_once '../models/controller.php';
-include_once '../models/products.php';
-include_once '../config/database.php';
+if ($class_name === 'Controller') {
+    $path = '../controller/';
+}elseif ($class_name === 'Database') {
+    $path = '../config/';
+}
+else {
+    $path = '../models/';
+}
 
-// include_once 'book.php';
+$extension = '.php';
+$fullpath = $path . $class_name . $extension;
+
+include_once $fullpath;
 }
 
 

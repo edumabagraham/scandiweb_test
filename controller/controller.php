@@ -1,9 +1,5 @@
 <?php
 
-include_once 'book.php';
-include_once 'dvd.php';
-include_once 'furniture.php';
-
 class Controller
 {
     public function fetchProducts()
@@ -45,8 +41,10 @@ class Controller
 
         $type = $data->type;
         unset($data->type);
-        $data = (array) $data;  // convert object to array
-        $product = new $type(...$data); //spreading to provide only data peculiar to the class
+        // convert object to array
+        $data = (array) $data;
+        //spreading to provide only data peculiar to the class
+        $product = new $type(...$data);
 
         try {
             if ($product->addProductType()) {
@@ -73,10 +71,8 @@ class Controller
     {
         $data = json_decode(file_get_contents('php://input'));
         print_r($data);
-        foreach($data as $sku)
-        {
+        foreach ($data as $sku) {
             Products::delete($sku);
         }
     }
 }
- 
